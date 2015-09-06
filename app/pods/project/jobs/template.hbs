@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-sm-10 col-sm-offset-2">
+      <div class="table-responsive">
+        <table class="table">
+          <tbody>
+            {{#each model as |job|}}
+            {{#unless job.hasParent}}
+            <tr>
+            <td>{{#link-to 'project.job' job.id}}{{job.trigger}}{{/link-to}}</td>
+            <td>{{job.result}}</td>
+            <td>{{job.receivedAt}}</td>
+            <td>took 5 min</td>
+            </tr>
+            {{/unless}}
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+  </div>
+</div>

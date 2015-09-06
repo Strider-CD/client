@@ -1,11 +1,10 @@
-/* jshint node: true */
-
 module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'client',
+    podModulePrefix: 'client/pods',
     environment: environment,
     baseURL: '/',
-    locationType: 'auto',
+    locationType: 'hash',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -21,10 +20,10 @@ module.exports = function(environment) {
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
-    // ENV.APP.LOG_ACTIVE_GENERATION = true;
+    ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
-    // ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.APP.LOG_VIEW_LOOKUPS = true;
   }
 
   if (environment === 'test') {
@@ -42,6 +41,16 @@ module.exports = function(environment) {
   if (environment === 'production') {
 
   }
+  ENV.CORE_URL = 'http://localhost:8000'
+  ENV.CORE_API_PREFIX = '/api/v1'
+  if(process.env.CORE_URL) {
+    ENV.CORE_URL = process.env.CORE_URL
+  }
+  if(process.env.CORE_API_PREFIX) {
+    ENV.CORE_API_PREFIX = process.env.CORE_API_PREFIX
+  }
+
+
 
   return ENV;
 };

@@ -1,0 +1,32 @@
+@import "libs.less";
+@import "overrides.less";
+
+body {
+  padding-top: 50px;
+}
+
+.project-row {
+  margin-bottom: 0.5em;
+
+  .name {
+    font-size: 1.5em;
+    margin-left: 1em;
+  }
+
+  .text-column {
+    font-size: 14px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+}
+
+.console {
+  font-family: monaco, "Courier New", Courier, monospace;
+  background: black;
+  color: white;
+  white-space: pre-wrap;       /* CSS 3 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
