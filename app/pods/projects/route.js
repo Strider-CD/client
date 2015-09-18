@@ -5,7 +5,7 @@ import ajax from 'ic-ajax';
 export default Ember.Route.extend({
     model: function(params) {
         return ajax({
-            url: 'http://localhost:8000/api/v1/projects',
+            url: `${ENV.CORE_FULL_URL}/projects`,
             type: 'get'
         }).then(function(projects) {
             projects.forEach(function(project) {
