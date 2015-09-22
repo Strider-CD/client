@@ -42,7 +42,6 @@ module.exports = function (environment) {
   }
   ENV.CORE_URL = 'http://localhost:8000'
   ENV.CORE_API_PREFIX = '/api/v1'
-  ENV.PRIMUS_CLIENT_URL = ENV.CORE_URL + '/primus/primus.js'
   if (process.env.CORE_URL) {
     ENV.CORE_URL = process.env.CORE_URL
   }
@@ -53,6 +52,7 @@ module.exports = function (environment) {
     ENV.PRIMUS_CLIENT_URL = process.env.PRIMUS_CLIENT_URL
   }
   ENV.CORE_FULL_URL = ENV.CORE_URL + ENV.CORE_API_PREFIX
+  ENV.PRIMUS_CLIENT_URL = ENV.CORE_URL + '/primus/primus.js'
 
   ENV.contentSecurityPolicy = {
     'default-src': "'none'",
