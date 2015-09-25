@@ -1,40 +1,5 @@
-<h2>{{model.name}} ({{model.id}})</h2>
-<!--
-<div class="row">
-    <div class="large-2 columns">
-        {{#link-to 'project.jobs'}}jobs{{/link-to}}
-    </div>
-</div>
--->
-<div class="row">
-  <div class="col-sm-6">
-    <!-- Split button -->
-    <div class="btn-group">
-      <button type="button" class="btn btn-default btn-sm"><i class="fa fa-check-circle fa-lg text-success"></i> Test</button>
-      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-        <span class="caret"></span>
-        <span class="sr-only">Toggle Dropdown</span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-        <li><a href="#">Test & Deploy</a></li>
-        <li><a href="#">Deploy</a></li>
-        <li><a href="#">Build</a></li>
-        <li class="divider"></li>
-        <li><a href="#">Disable</a></li>
-      </ul>
-    </div>
-
-    <span class="name">{{model.name}}</span>
-  </div>
-
-  <div class="col-sm-3 text-column">
-    <!-- {{model.organization}} -->
-  </div>
-
-  <div class="col-sm-3">
-    <a href="#" class="btn btn-link pull-right" {{action 'showJobs'}}>
-      <i {{bind-attr class=':fa showJobs:fa-angle-up:fa-angle-down :fa-lg'}}></i>
-    </a>
-  </div>
-</div>
+<h2>{{model.name}}@{{model.provider.type}}</h2>
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active">{{#link-to 'project.jobs'}}Current Builds{{/link-to}}</li>
+</ul>
 {{outlet}}

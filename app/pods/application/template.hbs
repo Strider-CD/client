@@ -11,26 +11,16 @@
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li>{{#link-to 'index'}}Dashboard{{/link-to}}</li>
         <li>{{#link-to 'projects'}}Projects{{/link-to}}</li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        {{#if sessionService.user}}
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-              {{gravatar-image email=sessionService.user.email size=18 default='identicon' class='img-circle'}}
-              {{sessionService.user.email}} <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu" role="menu">
-              <li>{{#link-to 'account'}}<i class="fa fa-user"></i> Account{{/link-to}}</li>
-              {{#if sessionService.isAdmin}}
-                <li>{{#link-to 'admin'}}<i class="fa fa-cogs"></i> Admin{{/link-to}}</li>
-              {{/if}}
-              <li class="divider"></li>
-              <li><a href="#" {{action 'signout'}}><i class="fa fa-sign-out"></i> Sign Out</a></li>
-            </ul>
-          </li>
+        {{#if session.isAuthenticated}}
+        {{#if session.guestlogin }}
+          <li><a {{ action 'invalidateSession' }}>Logout</a></li>
+        {{/if}}
+        {{else}}
+          <li>{{#link-to 'login' nonguest=true}}Login{{/link-to}}</li>
         {{/if}}
       </ul>
     </div><!--/.nav-collapse -->

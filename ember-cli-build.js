@@ -23,6 +23,7 @@ module.exports = function (defaults) {
   app.import('bower_components/bootstrap/dist/js/bootstrap.js')
   app.import('bower_components/blueimp-md5/js/md5.js')
   app.import('bower_components/ansi_up/ansi_up.js')
+  app.import('bower_components/lodash/lodash.js')
 
   var glyphs = pickFiles('bower_components/bootstrap/dist/fonts', {
     srcDir: '/',

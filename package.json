@@ -37,6 +37,7 @@
     "ember-data": "1.13.8",
     "ember-disable-proxy-controllers": "^1.0.0",
     "ember-export-application-global": "^1.0.3",
+    "ember-simple-auth": "git+https://github.com/simplabs/ember-simple-auth.git#51f75f4683d36b2efdf71997ab9672124614e42e",
     "ember-websockets": "1.2.3"
   },
   "dependencies": {

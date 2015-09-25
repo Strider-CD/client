@@ -1,33 +1,52 @@
 import Ember from 'ember';
 import ENV from '../../../config/environment';
 import ajax from 'ic-ajax';
-//import ansi_up from 'ansi_up'
+import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
-export default Ember.Route.extend({
-  setupController(controller, model) {
-    console.log('setting model', model);
+export default Ember.Route.extend(AuthenticatedRouteMixin, {
+  setupController (controller, model) {
     controller.willDestroy();
     controller.set('model', model);
     controller.setupPrimus();
-    window.scrollTo(0,document.body.scrollHeight)
+    window.scrollTo(0, document.body.scrollHeight);
   },
+
+  beforeModel (transition) {
+    this._super(transition)
+    var self = this;
+    return new Ember.RSVP.Promise(function (resolve, reject) {
+      if (!self.get('session.isAuthenticated')) {
+        return reject(new Error('Not authenticated'));
+      }
+      self.get('session').authorize('authorizer:core', (authorizationData) => {
+        return resolve(self.set('Authorization', authorizationData.Authorization));
+      });
+    });
+  },
+
   model (params) {
+    var self = this;
     return ajax({
-      url: `${ENV.CORE_FULL_URL}/projects/${this.modelFor('project').id}/jobs/id/${params.job_id}`,
-      type: 'get'
+      url: `${ENV.CORE_FULL_URL}/projects/${self.modelFor('project').id}/jobs/id/${params.job_id}`,
+      headers: {Authorization: self.get('Authorization')},
+      type: 'GET'
     }).then(function (jobArray) {
       var job = jobArray[0];
       job = transformStatusAndResult(job);
       job = transformChildren(job);
       job = transformOutput(job);
       return job;
-    }).catch(function (err) {
+    }).catch(function (error) {
+      console.error(error);
       return [];
     });
-  }//,
-  //afterModel: function() {
-      //this.set('post', this.modelFor('post'));
-  //}
+  },
+
+  events: {
+    error: function (reason) {
+      console.error('error loading model', reason);
+    }
+  }
 });
 
 function transformChildren (job) {
@@ -43,8 +62,8 @@ function transformChildren (job) {
     }
     job.children = children;
   }
-  return job
-};
+  return job;
+}
 
 function transformStatusAndResult (job) {
   if (job.status !== 'received' && job.result === 'pending') {
@@ -74,12 +93,12 @@ function transformOutput (job) {
     var output = {};
     job.output = [];
     job.outputString = '';
-    Object.assign(output, job.stdout);
-    Object.assign(output, job.stderr);
+    Ember.merge(output, job.stdout);
+    Ember.merge(output, job.stderr);
 
     for (var lineNo in output) {
       if (output.hasOwnProperty(lineNo)) {
-        //var line = ansi_up.ansi_to_html(`${output[lineNo]}\n`)
+        // var line = ansi_up.ansi_to_html(`${output[lineNo]}\n`)
         var line = `${output[lineNo]}\n`;
         job.output.push(line);
         job.outputString = job.outputString.concat(ansi_up.ansi_to_html(line));
