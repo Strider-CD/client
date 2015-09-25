@@ -1,5 +1,5 @@
 <h2>{{model.name}}@{{model.provider.type}}</h2>
-<ul class="nav nav-tabs">
-  <li role="presentation" class="active">{{#link-to 'project.jobs'}}Current Builds{{/link-to}}</li>
-</ul>
+<ol class="breadcrumb">
+  <li class="active">{{#link-to 'project.jobs'}}Current Builds{{/link-to}}</li>
+</ol>
 {{outlet}}

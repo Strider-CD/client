@@ -4,7 +4,7 @@ import ajax from 'ic-ajax';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
-  model: function (params) {
+  model: function () {
     var _this = this;
     return new Ember.RSVP.Promise(function (resolve, reject) {
       _this.get('session').authorize('authorizer:core', (authorizationData) => {

@@ -46,6 +46,13 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     error: function (reason) {
       console.error('error loading model', reason);
     }
+  },
+
+  actions: {
+    willTransition: function(transition) {
+      var route = this;
+      this.controller.destroyPrimus();
+    }
   }
 });
 
@@ -82,7 +89,7 @@ function transformStatusAndResult (job) {
 }
 
 function transformOutput (job) {
-  if (!(Ember.keys(job.stdout).length === 0 && Ember.keys(job.stderr).length === 0)) {
+  if (!(Object.keys(job.stdout).length === 0 && Object.keys(job.stderr).length === 0)) {
     job.hasOutput = true;
 
     Object.keys(job.stderr).forEach(function (key) {

@@ -5,7 +5,7 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   beforeModel (transition) {
-    this._super(transition)
+    this._super(transition);
     var self = this;
     return new Ember.RSVP.Promise(function (resolve, reject) {
       if (!self.get('session.isAuthenticated')) {
@@ -29,4 +29,14 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       return {};
     });
   },
+
+  redirect: function (model, transition) {
+    // Jump from index to jobs
+    // Note: just doing a transition without this check
+    // does not work because of the nested routes
+    console.log('transition', transition)
+    if(transition.targetName === 'project.index') {
+      this.transitionTo('project.jobs');
+    }
+  }
 });

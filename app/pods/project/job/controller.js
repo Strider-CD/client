@@ -7,8 +7,13 @@ export default Ember.Controller.extend({
 
   session: Ember.inject.service('session'),
 
-  willDestroy() {
-    this.get('socketService').closeSocketFor(ENV.PRIMUS_CLIENT_URL);
+  destroyPrimus() {
+    console.log('destroyPrimus called')
+    this.get('session').authorize('authorizer:core', (authorizationData) => {
+      var token = authorizationData.Authorization;
+      console.log('destroying socket for', `${ENV.PRIMUS_CLIENT_URL}?token=${token}`)
+      this.get('socketService').closeSocketFor(`${ENV.PRIMUS_CLIENT_URL}?token=${token}`);
+    });
   },
 
   setupPrimus: function() {
@@ -18,20 +23,21 @@ export default Ember.Controller.extend({
       var token = authorizationData.Authorization;
       var socket = self.get('socketService').socketFor(`${ENV.PRIMUS_CLIENT_URL}?token=${token}`);
 
-      socket.on('open', self.openConnection, self);
+      console.log('setupPrimus installing handlers for', {id: self.get('model'), token: token, socket: socket});
+
+      socket.on('open', self.openConnection.bind(self, token), self);
       socket.on('message', self.messageReceived, self);
       socket.on('close', function() {
       }, self);
     });
   },
 
-  openConnection: function() {
+  openConnection: function(token) {
+    console.log('openConnection called')
     var self = this;
-    this.get('session').authorize('authorizer:core', (authorizationData) => {
-      var token = authorizationData.Authorization;
-      var socket = self.get('socketService').socketFor(`${ENV.PRIMUS_CLIENT_URL}?token=${token}`);
-      socket.send({room: self.get('model').id, type: 'join', msg: {}});
-  });
+    var socket = self.get('socketService').socketFor(`${ENV.PRIMUS_CLIENT_URL}?token=${token}`);
+    console.log('sending ', {msg: {room: self.get('model').id, type: 'join', msg: {}}, socket: socket, token: token});
+    socket.send({room: self.get('model').id, type: 'join', msg: {}});
   },
 
 
@@ -128,14 +134,14 @@ export default Ember.Controller.extend({
       this.set("model.statusFailed", true);
     }
   },
-  //actions: {
-  //  sendButtonPressed: function() {
-      /*
-      * If you need to retrieve your websocket from another function or method you can simply
-      * get the cached version at no penalty
-      */
-  //    var socket = this.get('socketService').socketFor('ws://localhost:7000/');
-  //    socket.send('Hello Websocket World');
-  //  }
-  //}
+
+  followLog: function () {
+    if (this.get('model.hasOutput')) {
+      Ember.run.scheduleOnce('afterRender', this, function() {
+        window.scrollTo(0, document.body.scrollHeight)
+        console.log('scrolling');
+        //Ember.$("#afterOutput").animate({ scrollTop: Ember.$("#afterOutput")[0].scrollHeight}, 1000);
+      });
+    }
+  }.observes('model.outputString')
 });
