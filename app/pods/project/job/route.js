@@ -7,8 +7,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   setupController (controller, model) {
     controller.willDestroy();
     controller.set('model', model);
+    console.log('setupController model', model)
     controller.setupPrimus();
-    window.scrollTo(0, document.body.scrollHeight);
+    //window.scrollTo(0, document.body.scrollHeight);
   },
 
   beforeModel (transition) {
@@ -35,12 +36,52 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       job = transformStatusAndResult(job);
       job = transformChildren(job);
       job = transformOutput(job);
+      job = transformUrlAndInfo(job);
+      job = transformTime(job);
       return job;
     }).catch(function (error) {
       console.error(error);
       return [];
     });
   },
+
+  afterModel (model, params) {
+    var self = this;
+    var job = model;
+    console.log('afterModel', job);
+    if (job.parent) {
+      return ajax({
+        url: `${ENV.CORE_FULL_URL}/projects/${self.modelFor('project').id}/jobs/id/${job.parent}`,
+        headers: {Authorization: self.get('Authorization')},
+        type: 'GET'
+      }).then(function (jobArray) {
+        var parent = jobArray[0];
+        job.parentJob = transformChildren(parent);
+        job = getCmdEnvAndNumber(job);
+        job = transformUrlAndInfoWithParent(job);
+        console.log('job', job)
+        return job;
+      })
+    } else {
+      return model;
+    }
+  },
+
+  fetchParent: function () {
+    var self = this;
+    let job = self.get('model');
+    console.log('fetchParent job', job)
+    if (job.parent && !(job.parentJob)) {
+      if (job.parent.length > 0) {
+        var parModel = this.model({job_id: job.parent});
+
+        return parModel.then(function (parent) {
+          console.log('found parent and will set', parent);
+          self.set('model.parentJob', parent);
+        })
+      }
+    }
+  }.observes('model'),
 
   events: {
     error: function (reason) {
@@ -111,6 +152,64 @@ function transformOutput (job) {
         job.outputString = job.outputString.concat(ansi_up.ansi_to_html(line));
       }
     }
+  }
+  return job;
+}
+
+function transformUrlAndInfo (job) {
+  if (job.trigger === 'github') {
+    job.isGithub = true;
+    if (job.triggerInfo.type === 'pull_request') {
+      job.isPullRequest = true;
+      job.prNumber = job.triggerInfo.data.number
+      job.message = job.triggerInfo.general.message;
+    }
+    job.url = job.triggerInfo.general.url;
+    job.author = job.triggerInfo.general.author;
+    job.author.url = `https://github.com/${job.author.username}`;
+  }
+
+  return job;
+}
+
+function transformUrlAndInfoWithParent (job) {
+  if (job.parentJob) {
+    if (job.parentJob.trigger === 'github') {
+      job.isGithub = true;
+      if (job.parentJob.triggerInfo.type === 'pull_request') {
+        job.isPullRequest = true;
+        job.prNumber = job.parentJob.triggerInfo.data.number
+        job.message = job.parentJob.triggerInfo.general.message;
+      }
+      job.url = job.parentJob.triggerInfo.general.url;
+      job.author = job.parentJob.triggerInfo.general.author;
+      job.author.url = `https://github.com/${job.author.username}`;
+    }
+  }
+
+  return job;
+}
+
+function transformTime (job) {
+  let timestamps = ['receivedAt', 'updatedAt', 'runningSince']
+  timestamps.forEach(function (elem) {
+    let time = job[elem];
+    job[elem] = new Date(time)
+  })
+  return job;
+}
+
+function getCmdEnvAndNumber (job) {
+  if (Array.isArray(job.parentJob.children)) {
+    console.log('getCmdEnvAndNumber 2', job.parentJob.children)
+    job.parentJob.children.forEach(function (elem) {
+      console.log('elem1', elem)
+      if (elem.id === job.id) {
+        console.log('elem2', elem)
+        job.childNo = elem.childNo;
+        job.cmdsEnv = elem.cmdsEnv;
+      }
+    })
   }
   return job;
 }

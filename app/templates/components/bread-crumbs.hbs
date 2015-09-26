@@ -1,0 +1,16 @@
+<!--
+label: The title of the breadcrumb.
+path: The path that the crumb should link to. Can pass to link-to.
+model: The model object that can be passed to link-to. May not be present.
+linkable: True unless the controller's breadCrumbPath was false.
+isCurrent: True for the most specific (last) bread crumb, otherwise false.
+-->
+<ol class="breadcrumb">
+  {{#each breadCrumbs as |bc|}}
+  {{#if bc.isCurrent}}
+  <li class="active">{{#link-to bc.path bc.model}}{{bc.label}}{{/link-to}}</li>
+  {{else}}
+  <li>{{#link-to bc.path bc.model}}{{bc.label}}{{/link-to}}</li>
+  {{/if}}
+  {{/each}}
+</ol>

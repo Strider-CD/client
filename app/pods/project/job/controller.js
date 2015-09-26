@@ -2,6 +2,44 @@ import Ember from 'ember';
 import ENV from "../../../config/environment";
 
 export default Ember.Controller.extend({
+  breadCrumbs: Ember.computed("model.id", {
+    get() {
+      var crumbs = Ember.A([]);
+      if(this.get('model.parent')) {
+
+      }
+      if(this.get('model.parent')) {
+        var label = 'parent'
+        if (this.get('model.isPullRequest') && this.get('model.isPullRequest')) {
+          label = `PR: ${this.get('model.prNumber')}`;
+        }
+
+        crumbs.push({
+          label: label,
+          path: 'project.job',
+          model: this.get('model.parent'),
+        })
+        var label = `${this.get('model.childNo')} (${this.get('model.cmdsEnv')})`
+
+        crumbs.push({
+          label: label,
+          path: 'project.job',
+          model: this.get('model.id'),
+        })
+      } else {
+        var label = this.get('model').id
+        if (this.get('model.isPullRequest') && this.get('model.isPullRequest')) {
+          label = `PR: ${this.get('model.prNumber')}`;
+        }
+        crumbs.push({
+          label: label,
+          path: 'project.job',
+          model: this.get('model.id'),
+        })
+      }
+      return crumbs;
+    }
+  }),
 
   socketService: Ember.inject.service('primus'),
 
@@ -135,13 +173,30 @@ export default Ember.Controller.extend({
     }
   },
 
+  followLogOutput: true,
+
   followLog: function () {
-    if (this.get('model.hasOutput')) {
+    if (this.get('model.hasOutput') && this.followLogOutput) {
       Ember.run.scheduleOnce('afterRender', this, function() {
         window.scrollTo(0, document.body.scrollHeight)
         console.log('scrolling');
         //Ember.$("#afterOutput").animate({ scrollTop: Ember.$("#afterOutput")[0].scrollHeight}, 1000);
       });
     }
-  }.observes('model.outputString')
+  }.observes('model.outputString'),
+
+  actions: {
+    scrollToTop: function() {
+      window.scrollTo(0, 0);
+    },
+
+    scrollToBottom: function() {
+      window.scrollTo(0, document.body.scrollHeight);
+    },
+
+    toggleAutoScroll: function() {
+      this.toggleProperty('followLogOutput');
+      Ember.$('.toggleAutoScroll').toggleClass('glyphicon-collapse-down').toggleClass('glyphicon-unchecked');
+    }
+  }
 });

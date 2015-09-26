@@ -8,7 +8,8 @@
             <tr>
             <td>{{#link-to 'project.job' job.id}}{{job.trigger}}{{/link-to}}</td>
             <td>{{job.result}}</td>
-            <td>{{job.receivedAt}}</td>
+            <td>{{job.status}}</td>
+            <td>received: {{job.receivedAt}}</td>
             </tr>
             {{/unless}}
             {{/each}}

@@ -4,6 +4,8 @@ import ajax from 'ic-ajax';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
+    breadCrumb: 'jobs',
+
     beforeModel (transition) {
       this._super(transition);
       var self = this;
