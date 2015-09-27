@@ -46,10 +46,8 @@ export default Ember.Controller.extend({
   session: Ember.inject.service('session'),
 
   destroyPrimus() {
-    console.log('destroyPrimus called')
     this.get('session').authorize('authorizer:core', (authorizationData) => {
       var token = authorizationData.Authorization;
-      console.log('destroying socket for', `${ENV.PRIMUS_CLIENT_URL}?token=${token}`)
       this.get('socketService').closeSocketFor(`${ENV.PRIMUS_CLIENT_URL}?token=${token}`);
     });
   },
@@ -74,7 +72,6 @@ export default Ember.Controller.extend({
     console.log('openConnection called')
     var self = this;
     var socket = self.get('socketService').socketFor(`${ENV.PRIMUS_CLIENT_URL}?token=${token}`);
-    console.log('sending ', {msg: {room: self.get('model').id, type: 'join', msg: {}}, socket: socket, token: token});
     socket.send({room: self.get('model').id, type: 'join', msg: {}});
   },
 
@@ -97,7 +94,6 @@ export default Ember.Controller.extend({
 
     if (data.type === 'job.update' && data.room === this.get("model").id) {
       this.applyChangesToModel(data.msg);
-      console.log('model is now', this.get("model"));
     }
   },
 
@@ -179,8 +175,6 @@ export default Ember.Controller.extend({
     if (this.get('model.hasOutput') && this.followLogOutput) {
       Ember.run.scheduleOnce('afterRender', this, function() {
         window.scrollTo(0, document.body.scrollHeight)
-        console.log('scrolling');
-        //Ember.$("#afterOutput").animate({ scrollTop: Ember.$("#afterOutput")[0].scrollHeight}, 1000);
       });
     }
   }.observes('model.outputString'),

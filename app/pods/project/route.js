@@ -34,7 +34,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     // Jump from index to jobs
     // Note: just doing a transition without this check
     // does not work because of the nested routes
-    console.log('transition', transition)
     if(transition.targetName === 'project.index') {
       this.transitionTo('project.jobs');
     }

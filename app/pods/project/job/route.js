@@ -7,7 +7,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   setupController (controller, model) {
     controller.willDestroy();
     controller.set('model', model);
-    console.log('setupController model', model)
     controller.setupPrimus();
     //window.scrollTo(0, document.body.scrollHeight);
   },
@@ -48,7 +47,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   afterModel (model, params) {
     var self = this;
     var job = model;
-    console.log('afterModel', job);
     if (job.parent) {
       return ajax({
         url: `${ENV.CORE_FULL_URL}/projects/${self.modelFor('project').id}/jobs/id/${job.parent}`,
@@ -59,7 +57,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         job.parentJob = transformChildren(parent);
         job = getCmdEnvAndNumber(job);
         job = transformUrlAndInfoWithParent(job);
-        console.log('job', job)
         return job;
       })
     } else {
@@ -70,13 +67,11 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   fetchParent: function () {
     var self = this;
     let job = self.get('model');
-    console.log('fetchParent job', job)
     if (job.parent && !(job.parentJob)) {
       if (job.parent.length > 0) {
         var parModel = this.model({job_id: job.parent});
 
         return parModel.then(function (parent) {
-          console.log('found parent and will set', parent);
           self.set('model.parentJob', parent);
         })
       }
@@ -130,6 +125,8 @@ function transformStatusAndResult (job) {
 }
 
 function transformOutput (job) {
+  if (!job.stdout) job.stdout = {}
+  if (!job.stderr) job.stderr = {}
   if (!(Object.keys(job.stdout).length === 0 && Object.keys(job.stderr).length === 0)) {
     job.hasOutput = true;
 
@@ -143,7 +140,6 @@ function transformOutput (job) {
     job.outputString = '';
     Ember.merge(output, job.stdout);
     Ember.merge(output, job.stderr);
-
     for (var lineNo in output) {
       if (output.hasOwnProperty(lineNo)) {
         // var line = ansi_up.ansi_to_html(`${output[lineNo]}\n`)
@@ -201,11 +197,8 @@ function transformTime (job) {
 
 function getCmdEnvAndNumber (job) {
   if (Array.isArray(job.parentJob.children)) {
-    console.log('getCmdEnvAndNumber 2', job.parentJob.children)
     job.parentJob.children.forEach(function (elem) {
-      console.log('elem1', elem)
       if (elem.id === job.id) {
-        console.log('elem2', elem)
         job.childNo = elem.childNo;
         job.cmdsEnv = elem.cmdsEnv;
       }
