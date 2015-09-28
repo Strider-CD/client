@@ -25,7 +25,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       type: 'GET'
     }).then(function (project) {
       return project;
-    }).catch(function (error) {
+    }).catch(function () {
       return {};
     });
   },

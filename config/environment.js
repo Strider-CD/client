@@ -45,6 +45,7 @@ module.exports = function (environment) {
   if (process.env.CORE_URL) {
     ENV.CORE_URL = process.env.CORE_URL
   }
+  process.env['CORE_URL'] = ENV.CORE_URL
   if (process.env.CORE_API_PREFIX) {
     ENV.CORE_API_PREFIX = process.env.CORE_API_PREFIX
   }
@@ -56,13 +57,25 @@ module.exports = function (environment) {
 
   ENV.contentSecurityPolicy = {
     'default-src': "'none'",
-    'script-src': "'self' http://localhost:8000 https://cdn.mxpnl.com", // Allow scripts from https://cdn.mxpnl.com
+    'script-src': "'self' " + process.env.CORE_URL + " https://cdn.mxpnl.com", // Allow scripts from https://cdn.mxpnl.com
     'font-src': "'self' http://fonts.gstatic.com", // Allow fonts to be loaded from http://fonts.gstatic.com
-    'connect-src': "'self' ws://localhost:8000 http://localhost:8000",
+    'connect-src': "'self' " +  httpToWs(process.env.CORE_URL) + " " + process.env.CORE_URL,
     'img-src': "'self'",
     'style-src': "'self' 'unsafe-inline' http://fonts.googleapis.com", // Allow inline styles and loaded CSS from http://fonts.googleapis.com
     'media-src': "'self'"
   }
 
   return ENV
+}
+
+
+function httpToWs(httpUrl) {
+  var split = httpUrl.split(':')
+  var proto = split[0]
+  if (proto === 'http') {
+    split[0] = 'ws'
+  } else if (proto === 'https') {
+    split[0] = 'wss'
+  }
+  return split.join(':')
 }

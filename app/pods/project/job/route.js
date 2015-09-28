@@ -12,7 +12,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
 
   beforeModel (transition) {
-    this._super(transition)
+    this._super(transition);
     var self = this;
     return new Ember.RSVP.Promise(function (resolve, reject) {
       if (!self.get('session.isAuthenticated')) {
@@ -44,7 +44,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     });
   },
 
-  afterModel (model, params) {
+  afterModel (model) {
     var self = this;
     var job = model;
     if (job.parent) {
@@ -58,7 +58,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         job = getCmdEnvAndNumber(job);
         job = transformUrlAndInfoWithParent(job);
         return job;
-      })
+      });
     } else {
       return model;
     }
@@ -73,7 +73,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
         return parModel.then(function (parent) {
           self.set('model.parentJob', parent);
-        })
+        });
       }
     }
   }.observes('model'),
@@ -85,8 +85,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
 
   actions: {
-    willTransition: function(transition) {
-      var route = this;
+    willTransition: function() {
       this.controller.destroyPrimus();
     }
   }
@@ -125,8 +124,12 @@ function transformStatusAndResult (job) {
 }
 
 function transformOutput (job) {
-  if (!job.stdout) job.stdout = {}
-  if (!job.stderr) job.stderr = {}
+  if (!job.stdout) {
+    job.stdout = {};
+  }
+  if (!job.stderr) {
+    job.stderr = {};
+  }
   if (!(Object.keys(job.stdout).length === 0 && Object.keys(job.stderr).length === 0)) {
     job.hasOutput = true;
 
@@ -157,7 +160,7 @@ function transformUrlAndInfo (job) {
     job.isGithub = true;
     if (job.triggerInfo.type === 'pull_request') {
       job.isPullRequest = true;
-      job.prNumber = job.triggerInfo.data.number
+      job.prNumber = job.triggerInfo.data.number;
       job.message = job.triggerInfo.general.message;
     }
     job.url = job.triggerInfo.general.url;
@@ -174,7 +177,7 @@ function transformUrlAndInfoWithParent (job) {
       job.isGithub = true;
       if (job.parentJob.triggerInfo.type === 'pull_request') {
         job.isPullRequest = true;
-        job.prNumber = job.parentJob.triggerInfo.data.number
+        job.prNumber = job.parentJob.triggerInfo.data.number;
         job.message = job.parentJob.triggerInfo.general.message;
       }
       job.url = job.parentJob.triggerInfo.general.url;
@@ -187,11 +190,11 @@ function transformUrlAndInfoWithParent (job) {
 }
 
 function transformTime (job) {
-  let timestamps = ['receivedAt', 'updatedAt', 'runningSince']
+  let timestamps = ['receivedAt', 'updatedAt', 'runningSince'];
   timestamps.forEach(function (elem) {
     let time = job[elem];
-    job[elem] = new Date(time)
-  })
+    job[elem] = new Date(time);
+  });
   return job;
 }
 
@@ -202,7 +205,7 @@ function getCmdEnvAndNumber (job) {
         job.childNo = elem.childNo;
         job.cmdsEnv = elem.cmdsEnv;
       }
-    })
+    });
   }
   return job;
 }
