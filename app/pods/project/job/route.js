@@ -48,7 +48,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     var self = this;
     var job = model;
     if (job.parent) {
-      console.log('afterModel doing ajax call')
       return ajax({
         url: `${ENV.CORE_FULL_URL}/projects/${self.modelFor('project').id}/jobs/id/${job.parent}`,
         headers: {Authorization: self.get('Authorization')},
@@ -60,7 +59,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         job = transformUrlAndInfoWithParent(job);
         return job;
       }).catch(function (error) {
-        console.error('error whilst fetching parent job', error);
+        console.log('error fetching parentJob', error)
         return job;
       });
     } else {
@@ -107,7 +106,6 @@ function transformChildren (job) {
       }
     }
     job.children = _.sortBy(children, function(child) { return child.childNo; });
-    console.log('job.children', job.children)
   }
   return job;
 }

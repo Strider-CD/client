@@ -125,7 +125,7 @@ export default Ember.Controller.extend({
         }
       }
       this.set("model.hasChildren", true);
-      this.set("model.children", children);
+      this.set("model.children", _.sortBy(children, function(child) { return child.childNo; }));
     }
   },
 
