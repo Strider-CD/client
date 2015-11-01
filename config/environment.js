@@ -1,10 +1,9 @@
 module.exports = function (environment) {
   var ENV = {
     modulePrefix: 'client',
-    podModulePrefix: 'client/pods',
     environment: environment,
     baseURL: '/',
-    locationType: 'hash',
+    locationType: 'history',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -40,8 +39,10 @@ module.exports = function (environment) {
 
   if (environment === 'production') {
   }
+
   ENV.CORE_URL = 'http://localhost:8000'
-  ENV.CORE_API_PREFIX = '/api/v1'
+  ENV.CORE_API_PREFIX = 'api/v1'
+
   if (process.env.CORE_URL) {
     ENV.CORE_URL = process.env.CORE_URL
   }
@@ -52,7 +53,8 @@ module.exports = function (environment) {
   if (process.env.PRIMUS_CLIENT_URL) {
     ENV.PRIMUS_CLIENT_URL = process.env.PRIMUS_CLIENT_URL
   }
-  ENV.CORE_FULL_URL = ENV.CORE_URL + ENV.CORE_API_PREFIX
+
+  ENV.CORE_FULL_URL = ENV.CORE_URL + '/' + ENV.CORE_API_PREFIX
   ENV.PRIMUS_CLIENT_URL = ENV.CORE_URL + '/primus/primus.js'
 
   ENV.contentSecurityPolicy = {

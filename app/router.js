@@ -12,6 +12,10 @@ Router.map(function() {
       this.route('jobs');
       this.route('job', {path: '/jobs/:job_id'});
   });
+
+  this.route('drones', function () {
+    this.route('new');
+  });
 });
 
 export default Router;

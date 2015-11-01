@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import ENV from '../../../config/environment';
 import ajax from 'ic-ajax';
+import ansiUp from 'npm:ansi_up';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
@@ -151,7 +152,7 @@ function transformOutput (job) {
         // var line = ansi_up.ansi_to_html(`${output[lineNo]}\n`)
         var line = `${output[lineNo]}\n`;
         job.output.push(line);
-        job.outputString = job.outputString.concat(ansi_up.ansi_to_html(line));
+        job.outputString = job.outputString.concat(ansiUp.ansi_to_html(line));
       }
     }
   }

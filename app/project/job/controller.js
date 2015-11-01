@@ -1,5 +1,6 @@
 import Ember from 'ember';
-import ENV from "../../../config/environment";
+import ansiUp from 'npm:ansi_up';
+import ENV from '../../../config/environment';
 
 export default Ember.Controller.extend({
   breadCrumbs: Ember.computed("model.id", {
@@ -87,7 +88,7 @@ export default Ember.Controller.extend({
       if (data.type === 'stderr') {
         data.msg.line = `\x1B[1;31m${data.msg.line}\x1B[0m`;
       }
-      let output = this.get("model.outputString").concat(ansi_up.ansi_to_html(data.msg.line + '\n'));
+      let output = this.get("model.outputString").concat(ansiUp.ansi_to_html(data.msg.line + '\n'));
       this.set("model.outputString", output);
       //this.get("model").notifyPropertyChange("model")
     }

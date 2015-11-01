@@ -12,13 +12,14 @@
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li>{{#link-to 'projects'}}Projects{{/link-to}}</li>
+        <li>{{#link-to 'drones'}}Drones{{/link-to}}</li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
         {{#if session.isAuthenticated}}
-        {{#if session.guestlogin }}
-          <li><a {{ action 'invalidateSession' }}>Logout</a></li>
-        {{/if}}
+          {{#if session.guestlogin}}
+            <li><a {{ action 'invalidateSession' }}>Logout</a></li>
+          {{/if}}
         {{else}}
           <li>{{#link-to 'login' nonguest=true}}Login{{/link-to}}</li>
         {{/if}}
@@ -28,5 +29,9 @@
 </nav>
 
 <div class="container-fluid">
-  {{outlet}}
+  <div class="row">
+    <div class="col-sm-12">
+      {{outlet}}
+    </div>
+  </div>
 </div>
