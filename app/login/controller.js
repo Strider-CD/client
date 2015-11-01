@@ -19,16 +19,22 @@ export default Ember.Controller.extend({
     authenticate() {
       if(this.nonguest) {
         // allow user to login
-        this.set('session.guestlogin', false)
+        this.set('session.guestlogin', false);
       } else {
-        this.set('session.guestlogin', true)
+        this.set('session.guestlogin', true);
       }
 
       let data = this.getProperties('identification', 'password');
-      if(data.identification === 'guest') this.set('session.guestlogin', true)
-      this.get('session').authenticate('authenticator:core', data).catch((reason) => {
-        this.set('errorMessage', reason.errorThrown);
-      });
+
+      if (data.identification === 'guest') {
+        this.set('session.guestlogin', true);
+      }
+
+      this.get('session').authenticate('authenticator:core', data)
+        .then(() => this.transitionToRoute('projects'))
+        .catch((reason) => {
+          this.set('errorMessage', reason.errorThrown);
+        });
     }
   }
 });

@@ -1,20 +1,22 @@
 import Ember from 'ember';
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 
+
 export default Ember.Route.extend(ApplicationRouteMixin, {
   beforeModel() {
-    Ember.$.ajaxSetup({
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
-      }
-    });
+    var isAuthenticated = this.get('session.isAuthenticated');
+
+    if (!isAuthenticated) {
+      this.transitionTo('login');
+    }
   },
 
   actions: {
-    signout: function () {
+    signout() {
       this.set('sessionService.user', undefined);
     },
-    invalidateSession: function() {
+
+    invalidateSession() {
       this.get('session').invalidate();
     }
   }
