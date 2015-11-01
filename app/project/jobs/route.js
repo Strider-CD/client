@@ -19,8 +19,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       });
     },
 
-    model: function(params) {
+    model(params) {
       var self = this;
+
       return ajax({
         url: `${ENV.CORE_FULL_URL}/projects/${self.modelFor("project").id}/jobs`,
         headers: {Authorization: self.get('Authorization')},
@@ -35,7 +36,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             job.trigger = `${job.trigger}:${job.triggerInfo.type}/${job.triggerInfo.general.author.username}`;
           }
         });
-        return _(jobs).reverse().value();
+        return jobs.reverse().value();
       }).catch(function (error) {
         return [];
       });

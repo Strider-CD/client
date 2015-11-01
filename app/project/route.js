@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ENV from '../../config/environment';
+import ENV from '../config/environment';
 import ajax from 'ic-ajax';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
@@ -17,7 +17,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     });
   },
 
-  model: function (params) {
+  model(params) {
     var self = this;
     return ajax({
       url: `${ENV.CORE_FULL_URL}/projects/${params.project_id}`,
@@ -30,7 +30,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     });
   },
 
-  redirect: function (model, transition) {
+  redirect(model, transition) {
     // Jump from index to jobs
     // Note: just doing a transition without this check
     // does not work because of the nested routes
