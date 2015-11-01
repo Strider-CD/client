@@ -105,7 +105,7 @@ function transformChildren (job) {
         children.push(child);
       }
     }
-    job.children = _.sortBy(children, function(child) { return child.childNo; });
+    job.children = children.sortBy('childNo');
   }
   return job;
 }
