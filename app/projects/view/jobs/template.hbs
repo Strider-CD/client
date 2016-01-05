@@ -4,14 +4,14 @@
         <table class="table">
           <tbody>
             {{#each model as |job|}}
-            {{#unless job.hasParent}}
-            <tr>
-            <td>{{#link-to 'project.job' job.id}}{{job.trigger}}{{/link-to}}</td>
-            <td>{{job.result}}</td>
-            <td>{{job.status}}</td>
-            <td>received: {{job.receivedAt}}</td>
-            </tr>
-            {{/unless}}
+              {{#unless job.hasParent}}
+                <tr>
+                <td>{{#link-to 'projects.jobs.view' job.id}}{{job.trigger}}{{/link-to}}</td>
+                <td>{{job.result}}</td>
+                <td>{{job.status}}</td>
+                <td>received: {{job.receivedAt}}</td>
+                </tr>
+              {{/unless}}
             {{/each}}
           </tbody>
         </table>

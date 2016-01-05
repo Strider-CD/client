@@ -1,0 +1,11 @@
+<h2>Projects</h2>
+
+<div class="row">
+  <div class="large-2 columns">
+    <ul class="side-nav">
+      {{#each model as |item|}}
+        <li>{{#link-to 'projects.view' item.id}}{{item.name}}{{/link-to}}</li>
+      {{/each}}
+    </ul>
+  </div>
+</div>

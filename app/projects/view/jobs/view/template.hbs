@@ -1,27 +1,28 @@
 <div class="panel panel-primary" id="top">
   <div class="panel-heading">
     <h4>
-    {{#if model.statusSpinner}}
-    <i class="fa fa-spinner fa-spin"></i>
-    {{/if}}
-    {{#if model.statusHourGlass}}
-    <span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>
-    {{/if}}
-    {{#if model.statusSuccess}}
-    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-    {{/if}}
-    {{#if model.statusFailed}}
-    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-    {{/if}}
-    {{model.status}}
-    <button type="button" class="btn btn-default pull-right" {{action 'scrollToBottom'}}>
-      <span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" title="jump to the bottom"></span>
-    </button>
-    <button type="button" class="btn btn-default pull-right" {{action 'toggleAutoScroll'}}>
-      <span class="toggleAutoScroll glyphicon glyphicon-collapse-down" aria-hidden="true" title="disable auto scrolling"></span>
-    </button>
+      {{#if model.statusSpinner}}
+        <i class="fa fa-spinner fa-spin"></i>
+      {{/if}}
+      {{#if model.statusHourGlass}}
+        <span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>
+      {{/if}}
+      {{#if model.statusSuccess}}
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+      {{/if}}
+      {{#if model.statusFailed}}
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+      {{/if}}
+      {{model.status}}
+      <button type="button" class="btn btn-default pull-right" {{action 'scrollToBottom'}}>
+        <span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" title="jump to the bottom"></span>
+      </button>
+      <button type="button" class="btn btn-default pull-right" {{action 'toggleAutoScroll'}}>
+        <span class="toggleAutoScroll glyphicon glyphicon-collapse-down" aria-hidden="true" title="disable auto scrolling"></span>
+      </button>
     </h4>
   </div>
+
   <div class="row">
       {{#if model.isGithub}}
         <div class="col-md-6">
@@ -42,6 +43,7 @@
           </dl>
         </div>
       {{/if}}
+
       <div class="col-md-4">
         <dl class="dl-horizontal">
           <dt>Received</dt>
@@ -53,74 +55,75 @@
         </dl>
       </div>
   </div>
+
   {{#if model.hasChildren}}
-  <div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-md-8">
-        <div class="table-responsive">
-          <table class="table">
-              <tbody>
-                {{#each model.children as |childJob|}}
-                <tr>
-                  <td>{{childJob.childNo}}</td>
-                  <td>{{childJob.cmdsEnv}}</td>
-                  <td>{{childJob.status}}</td>
-                  <td>
-                    {{#if childJob.statusSpinner}}
-                    <i class="fa fa-spinner fa-spin"></i>
-                    {{/if}}
-                    {{#if childJob.statusHourGlass}}
-                    <span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>
-                    {{/if}}
-                    {{#if childJob.statusSuccess}}
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                    {{/if}}
-                    {{#if childJob.statusFailed}}
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    {{/if}}
-                  </td>
-                  <td>{{#link-to 'project.job' childJob.id}}{{childJob.id}}{{/link-to}}</td>
-                </tr>
-                {{/each}}
-              </tbody>
-            </table>
-        </div>
-      </div>
+    <div class="row">
       <div class="col-md-1"></div>
-  </div>
+      <div class="col-md-8">
+          <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                  {{#each model.children as |childJob|}}
+                  <tr>
+                    <td>{{childJob.childNo}}</td>
+                    <td>{{childJob.cmdsEnv}}</td>
+                    <td>{{childJob.status}}</td>
+                    <td>
+                      {{#if childJob.statusSpinner}}
+                      <i class="fa fa-spinner fa-spin"></i>
+                      {{/if}}
+                      {{#if childJob.statusHourGlass}}
+                      <span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>
+                      {{/if}}
+                      {{#if childJob.statusSuccess}}
+                      <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                      {{/if}}
+                      {{#if childJob.statusFailed}}
+                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                      {{/if}}
+                    </td>
+                    <td>{{#link-to 'project.job' childJob.id}}{{childJob.id}}{{/link-to}}</td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+          </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
   {{/if}}
 
   {{#if model.hasOutput}}
     <div class="row">
-        <div class="col-md-1"></div>
-        <div class="console col-md-10">{{{model.outputString}}}</div>
-        <div class="col-md-1"></div>
+      <div class="col-md-1"></div>
+      <div class="console col-md-10">{{{model.outputString}}}</div>
+      <div class="col-md-1"></div>
     </div>
     <div class="panel-footer" id="bottom">
       <h4>
-      {{#if model.statusSpinner}}
-        <i class="fa fa-spinner fa-spin"></i>
-      {{/if}}
-      {{#if model.statusHourGlass}}
-        <span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>
-      {{/if}}
-      {{#if model.statusSuccess}}
-        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-      {{/if}}
-      {{#if model.statusFailed}}
-        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-      {{/if}}
-      {{model.status}}
-      {{#if model.isGithub}}
-        <a href={{model.url}}>{{model.prNumber}}</a> for <a href={{model.author.url}}>{{model.author.username}}</a>
-      {{/if}}
-      <button type="button" class="btn btn-default pull-right" {{action 'scrollToTop'}}>
-        <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" title="jump to the top"></span>
-      </button>
-      <button type="button" class="btn btn-default pull-right" {{action 'toggleAutoScroll'}}>
-        <span class="toggleAutoScroll glyphicon glyphicon-collapse-down" aria-hidden="true" title="disable auto scrolling"></span>
-      </button>
-    </h4>
+        {{#if model.statusSpinner}}
+          <i class="fa fa-spinner fa-spin"></i>
+        {{/if}}
+        {{#if model.statusHourGlass}}
+          <span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>
+        {{/if}}
+        {{#if model.statusSuccess}}
+          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+        {{/if}}
+        {{#if model.statusFailed}}
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        {{/if}}
+        {{model.status}}
+        {{#if model.isGithub}}
+          <a href={{model.url}}>{{model.prNumber}}</a> for <a href={{model.author.url}}>{{model.author.username}}</a>
+        {{/if}}
+        <button type="button" class="btn btn-default pull-right" {{action 'scrollToTop'}}>
+          <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" title="jump to the top"></span>
+        </button>
+        <button type="button" class="btn btn-default pull-right" {{action 'toggleAutoScroll'}}>
+          <span class="toggleAutoScroll glyphicon glyphicon-collapse-down" aria-hidden="true" title="disable auto scrolling"></span>
+        </button>
+      </h4>
     </div>
-    {{/if}}
+  {{/if}}
 </div>
