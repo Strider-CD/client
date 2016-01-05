@@ -5,9 +5,12 @@ export default BaseAuthorizer.extend({
   authorize(data, block) {
     var token = this.buildToken();
 
+    var dat = data || {};
+
     if (this.get('session.isAuthenticated') && !Ember.isEmpty(token)) {
-      block({'Authorization': token});
+      block({ 'Authorization': token });
     } else {
+      block({ 'Authorization': dat.token });
     }
   },
 
