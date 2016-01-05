@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ENV from '../config/environment';
+import ENV from '../../config/environment';
 import ajax from 'ic-ajax';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 

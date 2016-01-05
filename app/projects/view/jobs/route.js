@@ -1,14 +1,14 @@
 import Ember from 'ember';
-import ENV from "../../config/environment";
+import ENV from '../../../config/environment';
 import ajax from 'ic-ajax';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
     breadCrumb: 'jobs',
 
-    beforeModel (transition) {
-      this._super(transition);
+    beforeModel(transition) {
       var self = this;
+
       return new Ember.RSVP.Promise(function (resolve, reject) {
         if (!self.get('session.isAuthenticated')) {
           return reject(new Error('Not authenticated'));
@@ -21,9 +21,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
     model(params) {
       var self = this;
+      var model = this.modelFor('projects.view');
 
       return ajax({
-        url: `${ENV.CORE_FULL_URL}/projects/${self.modelFor("project").id}/jobs`,
+        url: `${ENV.CORE_FULL_URL}/projects/${model.id}/jobs`,
         headers: {Authorization: self.get('Authorization')},
         type: 'GET'
       }).then(function (jobs) {
@@ -32,7 +33,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             job.hasParent = true;
           }
           job.receivedAt = new Date(job.receivedAt).toString();
-          if(job.trigger === 'github') {
+          if (job.trigger === 'github') {
             job.trigger = `${job.trigger}:${job.triggerInfo.type}/${job.triggerInfo.general.author.username}`;
           }
         });

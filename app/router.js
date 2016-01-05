@@ -7,6 +7,7 @@ var Router = Ember.Router.extend({
 
 Router.map(function() {
   this.route('login')
+
   this.route('projects', function () {
     this.route('view', { path: ':project_id' }, function() {
       this.route('jobs', function () {
