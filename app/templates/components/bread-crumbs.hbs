@@ -7,10 +7,10 @@ isCurrent: True for the most specific (last) bread crumb, otherwise false.
 -->
 <ol class="breadcrumb">
   {{#each breadCrumbs as |bc|}}
-  {{#if bc.isCurrent}}
-  <li class="active">{{#link-to bc.path bc.model}}{{bc.label}}{{/link-to}}</li>
-  {{else}}
-  <li>{{#link-to bc.path bc.model}}{{bc.label}}{{/link-to}}</li>
-  {{/if}}
+    {{#if bc.isCurrent}}
+      <li class="active">{{#link-to bc.path bc.model}}{{bc.label}}{{/link-to}}</li>
+    {{else}}
+      <li>{{#link-to bc.path bc.model}}{{bc.label}}{{/link-to}}</li>
+    {{/if}}
   {{/each}}
 </ol>
