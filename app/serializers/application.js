@@ -19,5 +19,20 @@ export default DS.JSONAPISerializer.extend({
         };
       })
     };
+  },
+
+  normalizeSingleResponse(store, primaryModelClass, payload, id, requestType) {
+    let attributes = copy(payload, true);
+
+    delete attributes.meta;
+    delete attributes.id;
+
+    return {
+      data: {
+        id: payload.id,
+        type: primaryModelClass.modelName,
+        attributes
+      }
+    };
   }
 });
