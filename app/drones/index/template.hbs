@@ -1,1 +1,21 @@
 {{#link-to 'drones.new'}}New Drone{{/link-to}}
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Server</th>
+      <th>Platform</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {{#each model as |drone|}}
+      <tr>
+        <td>{{drone.name}}</td>
+        <td>{{drone.server}}</td>
+        <td>{{drone.platform}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
