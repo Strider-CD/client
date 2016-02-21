@@ -18,6 +18,7 @@ Router.map(function() {
 
   this.route('drones', function () {
     this.route('new');
+    this.route('view', { path: ':drone_id' });
   });
 });
 
