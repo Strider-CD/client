@@ -11,7 +11,7 @@
 
   <tbody>
     {{#each model as |drone|}}
-      <tr>
+      <tr class="drone-list-item status-{{drone.status}}">
         <td>{{#link-to 'drones.view' drone.id}}{{drone.name}}{{/link-to}}</td>
         <td>{{drone.server}}</td>
         <td>{{drone.platform}}</td>

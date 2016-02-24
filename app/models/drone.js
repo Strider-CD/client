@@ -5,5 +5,6 @@ const { attr } = DS;
 export default DS.Model.extend({
   name: attr('string'),
   token: attr('string'),
-  platform: attr('string')
+  platform: attr('string'),
+  status: attr('string')
 });
