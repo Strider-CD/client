@@ -3,11 +3,11 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   session: Ember.inject.service('session'),
 
-  queryParams: ['nonguest'],
-  nonguest: null,
+  queryParams: ['guestlogin'],
+  guestlogin: false,
 
   doAutoGuestLogin () {
-    if(this.nonguest) {
+    if(!this.guestlogin) {
       // allow user to login
     } else {
       this.setProperties({'identification': 'guest', 'password': 'guest'});

@@ -34,5 +34,9 @@ export default DS.JSONAPISerializer.extend({
         attributes
       }
     };
+  },
+
+  serialize(snapshot, options) {
+    return snapshot.attributes();
   }
 });
